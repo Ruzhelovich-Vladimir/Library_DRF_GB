@@ -25,7 +25,7 @@ SECRET_KEY = 'c9nwwcib&j#7^5#9@#4bh^b*13&!z0(0&gle(oh-r$j%6&21+!'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'rest_framework',
-    'library',
+    'rest_framework_swagger',
+    'libraryapp',
+    'authapp',
 ]
 
 MIDDLEWARE = [
@@ -120,3 +122,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+REST_FRAMEWORK = { 'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema' }
+
+AUTH_USER_MODEL = 'authapp.user'
