@@ -1,0 +1,25 @@
+{
+  "name": "library_drf_gb",
+  "version": "1.0.0",
+  "main": "index.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "jQuery": "^1.7.4",
+    "jquery": "^3.6.0",
+    "npx": "^10.2.2",
+    "popper": "^1.0.1",
+    "popper.js": "^1.16.1"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "npm install -d"
+  },
+  "author": "",
+  "license": "ISC",
+  "keywords": [],
+  "description": ""
+}
