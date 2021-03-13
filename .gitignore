@@ -504,3 +504,6 @@ FodyWeavers.xsd
 
 env/
 
+
+# Ignore dynaconf secret files
+.secrets.*
