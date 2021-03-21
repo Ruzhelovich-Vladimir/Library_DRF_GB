@@ -1,20 +1,19 @@
-from rest_framework.serializers import HyperlinkedModelSerializer, Serializer
+from rest_framework.serializers import ModelSerializer
 from .models import Project, ToDo
 from libraryapp.serializers import AuthorSerializer
 
 
-class ProjectModelSerializer(HyperlinkedModelSerializer):
-    # authors = AuthorSerializer()
+class ProjectModelSerializer(ModelSerializer):
     class Meta:
         model = Project
-        exclude = ['url']
+        fields = '__all__'
 
-class ToDoModelSerializer(HyperlinkedModelSerializer):
-    #project = ProjectModelSerializer()
-    #author = AuthorSerializer()
+
+class ToDoModelSerializer(ModelSerializer):
     class Meta:
         model = ToDo
-        exclude = ['url']
+        fields = '__all__'
+
 
 
 

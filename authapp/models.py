@@ -1,29 +1,40 @@
-from django.db import models
-from uuid import uuid4
 from django.contrib.auth.models import AbstractUser
+from django.db import models
+from django.utils.timezone import now
+from datetime import timedelta
+
 
 class User(AbstractUser):
-    avatar = models.ImageField(upload_to='users_avatars', blank=True)
+    pass
 
-class UserProfile(models.Model):
+# TODO Реализовать:
+#   * разраничение прав по группам
+#   * создавать группу Administrator для API автомаически (для будующей админки)
+#   * реализовать скрипт создания супер пользователя для проекта
+#   * реализовать скрипты для создания и предоставления прав пользователю (пока без адиминки)
+class GroupApp(models.Model):
+    name = models.CharField(verbose_name='имя группы', primary_key=True, null=False, db_index=True,
+                            max_length=64)
+    descriptions = models.CharField(verbose_name='описание', null=True, max_length=128)
 
-    MALE = 'M'
-    FEMALE = "W"
+# TODO реализовать получение/обновление токена для доступа и токена для обновления,
+#  токена для доступа. В длальнйшем использовать NoSql
+class UserApp(models.Model):
+    login = models.CharField(verbose_name='логин', max_length=64, primary_key=True,
+                             null=False, db_index=True)
+    password = models.CharField(verbose_name='хеш пароля', max_length=64)
+    group = models.ForeignKey(GroupApp, verbose_name='группа', null=True,
+                              on_delete=models.DO_NOTHING)
 
-    GENDER_CHOICES = {
-        (MALE, 'M'),
-        (FEMALE, 'Ж')
-    }
+    access_token = models.CharField(verbose_name='токен доступа', max_length=128, blank=True)
+    access_token_expires = models.DateTimeField(verbose_name='срок действия токена доступа',
+                                                default=(now() + timedelta(hours=48)))
+    refresh_token = models.CharField(verbose_name='токен обновления', max_length=128, blank=True)
+    refresh_token_expires = models.DateTimeField(verbose_name='срок действия токена обновления',
+                                                 default=(now() + timedelta(hours=48)))
 
-    # user_name = models.OneToOneField(User, unique=True, null=False, db_index=True, on_delete=models.CASCADE)
-    uuid = models.UUIDField(verbose_name='ид', primary_key=True, default=uuid4)
-    user_name = models.CharField(verbose_name='имя пользователя', max_length=64)
-    first_name = models.CharField(verbose_name='имя', max_length=64)
-    last_name = models.CharField(verbose_name='фамилия', max_length=64)
-    gender = models.CharField(blank=True, max_length=1,
-                              choices=GENDER_CHOICES, verbose_name='пол')
-    birthday_year = models.PositiveIntegerField(verbose_name='год рождения')
-    email = models.CharField(verbose_name='E-Mail', unique=True, blank=False, max_length=64)
+    def is_access_token_expires(self):
+        return now() <= self.access_token_expires
 
-    def __str__(self):
-        return f'{self.first_name} {self.last_name}'
+    def is_refresh_token_expires(self):
+        return now() <= self.refresh_token_expires
